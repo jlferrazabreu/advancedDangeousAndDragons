@@ -9,6 +9,5 @@ public record DadosAtualizacaoPersonagem(
         int vida,
         int forca,
         int defesa,
-        int agilidade
-) {
+        int agilidade) {
 }

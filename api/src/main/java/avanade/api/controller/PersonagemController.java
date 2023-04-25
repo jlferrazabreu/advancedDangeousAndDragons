@@ -24,7 +24,7 @@ public class PersonagemController {
     }
     @GetMapping
     public Page listar(@PageableDefault(sort = {"nome"}) Pageable paginacao){
-        return repository.findAll(paginacao).map(DadosListagemPersonagem::new);
+        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemPersonagem::new);
     }
     @PutMapping
     @Transactional
@@ -32,6 +32,10 @@ public class PersonagemController {
         var personagem = repository.getReferenceById(dados.id());
         personagem.atualizarInformacoes(dados);
     }
-
-
+    @DeleteMapping("/{id}")
+    @Transactional
+    public  void excluir(@PathVariable Long id){
+        var personagem = repository.getReferenceById(id);
+        personagem.excluir();
+    }
 }

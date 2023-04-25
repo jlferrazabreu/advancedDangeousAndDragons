@@ -18,6 +18,7 @@ public class Personagem {
     private long id;
     @Enumerated(EnumType.STRING)
     private TipoPersonagem tipoPersonagem;
+    @Column(unique=true)
     private String nome;
     private int vida;
     private int forca;
@@ -25,6 +26,7 @@ public class Personagem {
     private int agilidade;
     private int quantidadeDeDados;
     private int facesDoDado;
+    private Boolean ativo;
 
     public Personagem(DadosCadastroPersonagem dados) {
         this.tipoPersonagem = dados.tipoPersonagem();
@@ -35,6 +37,7 @@ public class Personagem {
         this.agilidade = dados.agilidade();
         this.quantidadeDeDados = dados.quantidadeDeDados();
         this.facesDoDado = dados.facesDoDado();
+        this.ativo = true;
     }
 
     public void atualizarInformacoes(DadosAtualizacaoPersonagem dados) {
@@ -53,5 +56,9 @@ public class Personagem {
         if (dados.agilidade() != 0) {
             this.agilidade = dados.agilidade();
         }
+    }
+
+    public void excluir() {
+        this.ativo = false;
     }
 }
