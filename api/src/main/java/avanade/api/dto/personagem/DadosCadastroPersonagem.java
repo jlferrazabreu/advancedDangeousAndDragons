@@ -1,6 +1,6 @@
 package avanade.api.dto.personagem;
 
-import avanade.api.model.personagem.TipoPersonagem;
+import avanade.api.domain.personagem.TipoPersonagem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

@@ -1,7 +1,7 @@
 package avanade.api.dto.personagem;
 
-import avanade.api.model.personagem.Personagem;
-import avanade.api.model.personagem.TipoPersonagem;
+import avanade.api.domain.personagem.Personagem;
+import avanade.api.domain.personagem.TipoPersonagem;
 
 public record DadosListagemPersonagem(Long id,TipoPersonagem tipoPersonagem, String nome, int vida, int forca, int defesa, int agilidade) {
     public DadosListagemPersonagem(Personagem personagem) {

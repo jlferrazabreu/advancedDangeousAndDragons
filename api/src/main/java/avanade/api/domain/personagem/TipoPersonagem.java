@@ -1,4 +1,4 @@
-package avanade.api.model.personagem;
+package avanade.api.domain.personagem;
 
 public enum TipoPersonagem {
     HEROI,

@@ -1,4 +1,4 @@
-package avanade.api.model.personagem;
+package avanade.api.domain.personagem;
 
 import avanade.api.dto.personagem.DadosAtualizacaoPersonagem;
 import avanade.api.dto.personagem.DadosCadastroPersonagem;

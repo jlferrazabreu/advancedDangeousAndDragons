@@ -1,11 +1,11 @@
 package avanade.api.controller;
 
+import avanade.api.domain.personagem.Personagem;
+import avanade.api.domain.personagem.PersonagemRepository;
 import avanade.api.dto.personagem.DadosAtualizacaoPersonagem;
 import avanade.api.dto.personagem.DadosCadastroPersonagem;
 import avanade.api.dto.personagem.DadosDetalhamentoPersonagem;
 import avanade.api.dto.personagem.DadosListagemPersonagem;
-import avanade.api.model.personagem.Personagem;
-import avanade.api.model.personagem.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

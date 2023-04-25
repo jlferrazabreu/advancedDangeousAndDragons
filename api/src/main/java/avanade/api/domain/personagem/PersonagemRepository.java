@@ -1,4 +1,4 @@
-package avanade.api.model.personagem;
+package avanade.api.domain.personagem;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
