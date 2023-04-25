@@ -1,5 +1,6 @@
 package avanade.api.model.personagem;
 
+import avanade.api.dto.personagem.DadosAtualizacaoPersonagem;
 import avanade.api.dto.personagem.DadosCadastroPersonagem;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -34,5 +35,23 @@ public class Personagem {
         this.agilidade = dados.agilidade();
         this.quantidadeDeDados = dados.quantidadeDeDados();
         this.facesDoDado = dados.facesDoDado();
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoPersonagem dados) {
+        if (dados.nome() != null) {
+            this.nome = dados.nome();
+        }
+        if (dados.vida() != 0) {
+            this.vida = dados.vida();
+        }
+        if (dados.forca() != 0) {
+            this.forca = dados.forca();
+        }
+        if (dados.defesa() != 0) {
+            this.defesa = dados.defesa();
+        }
+        if (dados.agilidade() != 0) {
+            this.agilidade = dados.agilidade();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package avanade.api.controller;
 
+import avanade.api.dto.personagem.DadosAtualizacaoPersonagem;
 import avanade.api.dto.personagem.DadosCadastroPersonagem;
 import avanade.api.dto.personagem.DadosListagemPersonagem;
 import avanade.api.model.personagem.Personagem;
@@ -18,11 +19,19 @@ public class PersonagemController {
     private PersonagemRepository repository;
     @PostMapping
     @Transactional
-    public void Cadastrar(@RequestBody DadosCadastroPersonagem dados) {
+    public void cadastrar(@RequestBody DadosCadastroPersonagem dados) {
         repository.save(new Personagem(dados));
     }
     @GetMapping
-    public Page<DadosListagemPersonagem> Listar(@PageableDefault(sort = {"nome"}) Pageable paginacao){
+    public Page listar(@PageableDefault(sort = {"nome"}) Pageable paginacao){
         return repository.findAll(paginacao).map(DadosListagemPersonagem::new);
     }
+    @PutMapping
+    @Transactional
+    public void atualizar(@RequestBody DadosAtualizacaoPersonagem dados) {
+        var personagem = repository.getReferenceById(dados.id());
+        personagem.atualizarInformacoes(dados);
+    }
+
+
 }

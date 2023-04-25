@@ -9,16 +9,16 @@ public record DadosCadastroPersonagem(
         TipoPersonagem tipoPersonagem,
         @NotBlank
         String nome,
-        @NotBlank
+        @NotNull
         int vida,
-        @NotBlank
+        @NotNull
         int forca,
-        @NotBlank
+        @NotNull
         int defesa,
-        @NotBlank
+        @NotNull
         int agilidade,
-        @NotBlank
+        @NotNull
         int quantidadeDeDados,
-        @NotBlank
+        @NotNull
         int facesDoDado) {
 }
