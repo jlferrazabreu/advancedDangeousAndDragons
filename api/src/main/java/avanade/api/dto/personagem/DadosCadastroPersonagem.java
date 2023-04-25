@@ -1,6 +1,24 @@
 package avanade.api.dto.personagem;
 
-import avanade.api.model.Enuns.TipoPersonagem;
+import avanade.api.model.personagem.TipoPersonagem;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record DadosCadastroPersonagem(TipoPersonagem tipoPersonagem, String nome, int vida, int forca, int defesa, int agilidade, int quantidadeDeDados, int FacesDoDado) {
+public record DadosCadastroPersonagem(
+        @NotNull
+        TipoPersonagem tipoPersonagem,
+        @NotBlank
+        String nome,
+        @NotBlank
+        int vida,
+        @NotBlank
+        int forca,
+        @NotBlank
+        int defesa,
+        @NotBlank
+        int agilidade,
+        @NotBlank
+        int quantidadeDeDados,
+        @NotBlank
+        int facesDoDado) {
 }
