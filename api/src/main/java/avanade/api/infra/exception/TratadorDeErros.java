@@ -1,4 +1,4 @@
-package avanade.api.infra;
+package avanade.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
