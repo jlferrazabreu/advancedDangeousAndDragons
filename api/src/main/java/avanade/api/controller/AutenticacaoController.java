@@ -1,7 +1,7 @@
 package avanade.api.controller;
 
+import avanade.api.domain.dto.autenticacao.DadosAutenticacao;
 import avanade.api.domain.usuario.Usuario;
-import avanade.api.dto.usuario.DadosAutenticacao;
 import avanade.api.infra.security.DadosTokenJWT;
 import avanade.api.infra.security.TokenService;
 import jakarta.validation.Valid;

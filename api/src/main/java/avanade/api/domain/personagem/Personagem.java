@@ -1,8 +1,9 @@
 package avanade.api.domain.personagem;
 
-import avanade.api.dto.personagem.DadosAtualizacaoPersonagem;
-import avanade.api.dto.personagem.DadosCadastroPersonagem;
+import avanade.api.domain.dto.personagem.DadosAtualizacaoPersonagem;
+import avanade.api.domain.dto.personagem.DadosCadastroPersonagem;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,12 @@ import lombok.NoArgsConstructor;
 @Entity(name="Personagem")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Personagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Enumerated(EnumType.STRING)
     private TipoPersonagem tipoPersonagem;
     @Column(unique=true)

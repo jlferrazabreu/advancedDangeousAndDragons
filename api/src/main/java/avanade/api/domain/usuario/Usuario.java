@@ -1,5 +1,6 @@
 package avanade.api.domain.usuario;
 
+import avanade.api.domain.dto.usuario.DadosEscolherPersonagem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -24,6 +25,12 @@ public class Usuario implements UserDetails {
     private  Long id;
     private  String login;
     private  String senha;
+    private Long personagem_id;
+
+    public Usuario(String login, String senha) {
+        this.login = login;
+        this.senha = senha;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -58,5 +65,11 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void atualizarPersonagemDoUsuario(DadosEscolherPersonagem dados) {
+        if (dados.personagem_id() != null) {
+            this.personagem_id= dados.personagem_id();
+        }
     }
 }

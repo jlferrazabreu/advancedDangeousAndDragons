@@ -1,11 +1,9 @@
 package avanade.api.controller;
 
-import avanade.api.domain.personagem.Personagem;
-import avanade.api.domain.personagem.PersonagemRepository;
-import avanade.api.dto.personagem.DadosAtualizacaoPersonagem;
-import avanade.api.dto.personagem.DadosCadastroPersonagem;
-import avanade.api.dto.personagem.DadosDetalhamentoPersonagem;
-import avanade.api.dto.personagem.DadosListagemPersonagem;
+import avanade.api.domain.dto.personagem.DadosAtualizacaoPersonagem;
+import avanade.api.domain.dto.personagem.DadosCadastroPersonagem;
+import avanade.api.domain.dto.personagem.DadosListagemPersonagem;
+import avanade.api.infra.service.GerenciadorDePersonagem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,43 +17,34 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("personagens")
 public class PersonagemController {
     @Autowired
-    private PersonagemRepository repository;
+    private GerenciadorDePersonagem gerenciador;
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody DadosCadastroPersonagem dados, UriComponentsBuilder uriBuilder) {
-        var personagem = new Personagem(dados);
-        repository.save(personagem);
-
-        var uri = uriBuilder.path("/personagens/{id}").buildAndExpand(personagem.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoPersonagem(personagem));
+        var dto = gerenciador.cadastrar(dados);
+        var uri = uriBuilder.path("/personagens/{id}").buildAndExpand(dto.id()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
     @GetMapping
     public ResponseEntity<Page<DadosListagemPersonagem>> listar(@PageableDefault(sort = {"nome"}) Pageable paginacao){
-        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemPersonagem::new);
-        return ResponseEntity.ok(page);
+        var dto = gerenciador.listar(paginacao);
+        return ResponseEntity.ok(dto);
     }
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody DadosAtualizacaoPersonagem dados) {
-        var personagem = repository.getReferenceById(dados.id());
-        personagem.atualizarInformacoes(dados);
-
-        return ResponseEntity.ok(new DadosDetalhamentoPersonagem(personagem));
+        var dto = gerenciador.atualizar(dados);
+        return ResponseEntity.ok(dto);
     }
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id){
-        var personagem = repository.getReferenceById(id);
-        personagem.excluir();
-
+        gerenciador.excluir(id);
         return ResponseEntity.noContent().build();
     }
-
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id){
-        var personagem = repository.getReferenceById(id);
-
-        return ResponseEntity.ok(new DadosDetalhamentoPersonagem(personagem));
+        var dto = gerenciador.detalhar(id);
+        return ResponseEntity.ok(dto);
     }
 }
