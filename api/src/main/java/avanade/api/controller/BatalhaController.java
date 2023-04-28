@@ -19,7 +19,7 @@ public class BatalhaController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @Transactional
     public ResponseEntity iniciarBatalha(@PathVariable Long id){
         var dto = gerenciador.iniciarBatalha(id);
@@ -43,6 +43,12 @@ public class BatalhaController {
     @Transactional
     public ResponseEntity calculardano(@PathVariable Long id){
         var dto = gerenciador.calculardano(id);
+        return ResponseEntity.ok(dto);
+    }
+    @PutMapping("calcularpontosvida/{id}")
+    @Transactional
+    public ResponseEntity calcularpontosvida(@PathVariable Long id){
+        var dto = gerenciador.calcularpontosvida(id);
         return ResponseEntity.ok(dto);
     }
 }

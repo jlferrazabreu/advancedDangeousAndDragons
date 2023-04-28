@@ -4,6 +4,7 @@ import avanade.api.domain.batalha.Batalha;
 import avanade.api.domain.batalha.BatalhaRepository;
 import avanade.api.domain.dto.batalha.DadosCadastroBatalha;
 import avanade.api.domain.dto.batalha.DadosDetalhamentoBatalha;
+import avanade.api.domain.dto.batalha.DadosEncerramentoBatalha;
 import avanade.api.domain.dto.historicoBatalha.DadosAtaqueHistoricoBatalha;
 import avanade.api.domain.dto.historicoBatalha.DadosCadastroHistoricoBatalha;
 import avanade.api.domain.dto.historicoBatalha.DadosDefesaHistoricoBatalha;
@@ -119,14 +120,35 @@ public class GerenciadorDeBatalha {
         var numSorteado = jogarDado(quantidadeDados, faceDoDado);
         var pontos = numSorteado + personagem.getForca();
         if (jogadorAtaque.getPontosAtaque() <= jogadorDefesa.getPontosDefesa()) {
-            historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), proximaAcao, numSorteado,0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(), LocalDateTime.now()));
+            var dadosHistoricoBatalha = new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), "INICIAR", numSorteado,0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(), LocalDateTime.now());
+            historicoBatalha = new HistoricoBatalha(dadosHistoricoBatalha);
             historicoBatalhaRepository.save(historicoBatalha);
-            return new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), proximaAcao, numSorteado,0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(),LocalDateTime.now());
+            return new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), "INICIAR", numSorteado,0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(),LocalDateTime.now());
         }else {
             historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorAtaque.getJogador(), jogadorAtaque.getPersonagem(), jogadorAtaque.getProximaAcao(), proximaAcao, numSorteado, pontos, 0, jogadorDefesa.getPontosDefesa(), jogadorAtaque.getPontosVida(), LocalDateTime.now()));
             historicoBatalhaRepository.save(historicoBatalha);
             return new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorAtaque.getJogador(), jogadorAtaque.getPersonagem(), jogadorAtaque.getProximaAcao(), proximaAcao, numSorteado, pontos, 0, jogadorDefesa.getPontosDefesa(), jogadorAtaque.getPontosVida(), LocalDateTime.now());
         }
+    }
+
+    public DadosCadastroHistoricoBatalha calcularpontosvida(Long id) {
+        HistoricoBatalha historicoBatalha;
+        var jogadorAtaque = historicoBatalhaRepository.buscarAtacantePontosVida(id);
+        var jogadorDefesa = historicoBatalhaRepository.buscarDefensorPontosVida(id);
+        var batalha = batalhaRepository.findById(id).get();
+        var proximaAcao = "INICIAR";
+        var pontosVida = jogadorDefesa.getPontosVida() - jogadorAtaque.getDano();
+        if (pontosVida <= 0) {
+            var dadosHistoricoBatalha = new DadosCadastroHistoricoBatalha(id, jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), proximaAcao, jogadorDefesa.getNumSorteado(),0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(), LocalDateTime.now());
+            historicoBatalha = new HistoricoBatalha(dadosHistoricoBatalha);
+            historicoBatalhaRepository.save(historicoBatalha);
+            batalha.atualizarBatalha(new DadosEncerramentoBatalha(false, LocalDateTime.now()));
+
+            return new DadosCadastroHistoricoBatalha(id, jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), proximaAcao, jogadorDefesa.getNumSorteado(),0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(), LocalDateTime.now());
+        }
+
+
+        return new DadosCadastroHistoricoBatalha(id, jogadorAtaque.getJogador(), jogadorAtaque.getPersonagem(), jogadorAtaque.getProximaAcao(), proximaAcao, 0, 0, 0, jogadorDefesa.getPontosDefesa(), jogadorAtaque.getPontosVida(), LocalDateTime.now());
     }
     private int jogarDado(int quantidadeDados,int faceDoDado) {
             var novoNumero = 0;

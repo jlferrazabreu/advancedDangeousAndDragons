@@ -1,6 +1,7 @@
 package avanade.api.domain.batalha;
 
 import avanade.api.domain.dto.batalha.DadosCadastroBatalha;
+import avanade.api.domain.dto.batalha.DadosEncerramentoBatalha;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,5 +31,14 @@ public class Batalha {
         this.personagem_id = personagem_id;
         this.ativo = true;
         this.dataInicio = LocalDateTime.now();
+    }
+    /*public Batalha(DadosEncerramentoBatalha dados) {
+        this.ativo = dados.ativo();
+        this.dataFinal = dados.dataFinal();
+    }*/
+
+    public void atualizarBatalha(DadosEncerramentoBatalha dados) {
+            this.ativo = false;
+            this.dataFinal = LocalDateTime.now();
     }
 }
