@@ -5,10 +5,7 @@ import avanade.api.infra.service.GerenciadorDeBatalha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("batalhas")
@@ -20,5 +17,20 @@ public class BatalhaController {
     public ResponseEntity gerarBatalha(@RequestBody DadosCadastroBatalha dados){
         var dto = gerenciador.gerarBatalha(dados);
         return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity iniciarBatalha(@PathVariable Long id){
+        var dto = gerenciador.iniciarBatalha(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("ataque/{id}")
+    @Transactional
+    public void ataque(@PathVariable Long id){
+        //var dto = gerenciador.ataque(id);
+        //eturn ResponseEntity.ok(dto);
+        System.out.println("Chequei aqui");
     }
 }

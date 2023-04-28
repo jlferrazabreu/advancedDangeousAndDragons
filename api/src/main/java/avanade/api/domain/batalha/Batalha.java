@@ -18,13 +18,15 @@ public class Batalha {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long usuario_id;
+    private Long personagem_usuario_id;
     private Long personagem_id;
     private Boolean ativo;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFinal;
 
-    public Batalha(DadosCadastroBatalha dados, Long personagem_id) {
+    public Batalha(DadosCadastroBatalha dados, Long personagem_id, Long personagem_usuario_id) {
         this.usuario_id = dados.usuario_id();
+        this.personagem_usuario_id = personagem_usuario_id;
         this.personagem_id = personagem_id;
         this.ativo = true;
         this.dataInicio = LocalDateTime.now();

@@ -1,6 +1,7 @@
 create table batalhas(
     id bigint not null auto_increment,
     usuario_id bigint not null,
+    personagem_usuario_id bigint not null,
     personagem_id bigint not null,
     ativo BOOLEAN not null,
     dataInicio DATETIME not null,
