@@ -26,17 +26,23 @@ public class BatalhaController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("ataque/{id}")
+    @PostMapping("ataque/{id}")
     @Transactional
     public ResponseEntity ataque(@PathVariable Long id){
         var dto = gerenciador.ataque(id);
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("defesa/{id}")
+    @PostMapping("defesa/{id}")
     @Transactional
     public ResponseEntity defesa(@PathVariable Long id){
         var dto = gerenciador.defesa(id);
+        return ResponseEntity.ok(dto);
+    }
+    @PostMapping("calculardano/{id}")
+    @Transactional
+    public ResponseEntity calculardano(@PathVariable Long id){
+        var dto = gerenciador.calculardano(id);
         return ResponseEntity.ok(dto);
     }
 }

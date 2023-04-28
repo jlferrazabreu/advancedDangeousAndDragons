@@ -10,4 +10,8 @@ public interface HistoricoBatalhaRepository extends JpaRepository<HistoricoBatal
     HistoricoBatalha buscarAtacante(Long id);
     @Query("select h from HistoricoBatalha h where batalha_id = :id and proximaAcao = 'DEFENDER' order by id desc limit 1")
     HistoricoBatalha buscarDefensor(Long id);
+    @Query("select h from HistoricoBatalha h where batalha_id = :id and proximaAcao = 'DANO' and acao = 'ATACAR' order by id desc limit 1")
+    HistoricoBatalha buscarAtacanteDano(Long id);
+    @Query("select h from HistoricoBatalha h where batalha_id = :id and proximaAcao = 'DANO' and acao = 'DEFENDER' order by id desc limit 1")
+    HistoricoBatalha buscarDefensorDano(Long id);
 }

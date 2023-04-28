@@ -61,8 +61,8 @@ public class GerenciadorDeBatalha {
         }
         var faceDoDado = 20;
         var batalha = batalhaRepository.findById(id).get();
-        var usuario = personagemRepository.getReferenceById(batalha.getPersonagem_usuario_id());
-        var computador = personagemRepository.getReferenceById(batalha.getPersonagem_id());
+        var usuario = personagemRepository.findById(batalha.getPersonagem_usuario_id()).get();
+        var computador = personagemRepository.findById(batalha.getPersonagem_id()).get();
 
         while (numSorteadoUsuario == numSorteadoComputador){
             numSorteadoUsuario = random.nextInt(faceDoDado)+1;
@@ -89,9 +89,9 @@ public class GerenciadorDeBatalha {
         var batalha = batalhaRepository.findById(id).get();
         var numSorteado = random.nextInt(faceDoDado)+1;
         var pontos = numSorteado + personagem.getForca() + personagem.getAgilidade();
-        var historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogador.getJogador(),jogador.getPersonagem(), jogador.getAcao(), proximaAcao,numSorteado,0,pontos ,0 ,jogador.getPontosVida(), LocalDateTime.now()));
+        var historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogador.getJogador(),jogador.getPersonagem(), jogador.getProximaAcao(), proximaAcao,numSorteado,0,pontos ,0 ,jogador.getPontosVida(), LocalDateTime.now()));
         historicoBatalhaRepository.save(historicoBatalha);
-        return new DadosAtaqueHistoricoBatalha(jogador.getBatalha_id(), jogador.getJogador(), jogador.getPersonagem(), jogador.getAcao(), proximaAcao, jogador.getNumSorteado(), jogador.getDano(),pontos, jogador.getPontosVida());
+        return new DadosAtaqueHistoricoBatalha(jogador.getBatalha_id(), jogador.getJogador(), jogador.getPersonagem(), jogador.getProximaAcao(), proximaAcao, jogador.getNumSorteado(), jogador.getDano(),pontos, jogador.getPontosVida());
     }
 
     public DadosDefesaHistoricoBatalha defesa(Long id) {
@@ -102,18 +102,39 @@ public class GerenciadorDeBatalha {
         var batalha = batalhaRepository.findById(id).get();
         var numSorteado = random.nextInt(faceDoDado)+1;
         var pontos = numSorteado + personagem.getForca() + personagem.getAgilidade();
-        var historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogador.getJogador(),jogador.getPersonagem(), jogador.getAcao(), proximaAcao,numSorteado,0,0 ,pontos ,jogador.getPontosVida(), LocalDateTime.now()));
+        var historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogador.getJogador(),jogador.getPersonagem(), jogador.getProximaAcao(), proximaAcao,numSorteado,0,0 ,pontos ,jogador.getPontosVida(), LocalDateTime.now()));
         historicoBatalhaRepository.save(historicoBatalha);
-        return new DadosDefesaHistoricoBatalha(jogador.getBatalha_id(), jogador.getJogador(), jogador.getPersonagem(), jogador.getAcao(), proximaAcao, jogador.getNumSorteado(), jogador.getDano(),pontos, jogador.getPontosVida());
+        return new DadosDefesaHistoricoBatalha(jogador.getBatalha_id(), jogador.getJogador(), jogador.getPersonagem(), jogador.getProximaAcao(), proximaAcao, jogador.getNumSorteado(), jogador.getDano(),pontos, jogador.getPontosVida());
     }
 
+    public DadosCadastroHistoricoBatalha calculardano(Long id) {
+        HistoricoBatalha historicoBatalha;
+        var jogadorAtaque = historicoBatalhaRepository.buscarAtacanteDano(id);
+        var jogadorDefesa = historicoBatalhaRepository.buscarDefensorDano(id);
+        var batalha = batalhaRepository.findById(id).get();
+        var personagem = personagemRepository.findById(batalhaRepository.findById(id).get().getId()).get();
+        var proximaAcao = "PONTOS_VIDA";
+        var quantidadeDados = personagem.getQuantidadeDeDados();
+        var faceDoDado = personagem.getFacesDoDado();
+        var numSorteado = jogarDado(quantidadeDados, faceDoDado);
+        var pontos = numSorteado + personagem.getForca();
+        if (jogadorAtaque.getPontosAtaque() <= jogadorDefesa.getPontosDefesa()) {
+            historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), proximaAcao, numSorteado,0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(), LocalDateTime.now()));
+            historicoBatalhaRepository.save(historicoBatalha);
+            return new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorDefesa.getJogador(),jogadorDefesa.getPersonagem(), jogadorDefesa.getProximaAcao(), proximaAcao, numSorteado,0,0 ,jogadorDefesa.getPontosDefesa(),jogadorDefesa.getPontosVida(),LocalDateTime.now());
+        }else {
+            historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorAtaque.getJogador(), jogadorAtaque.getPersonagem(), jogadorAtaque.getProximaAcao(), proximaAcao, numSorteado, pontos, 0, jogadorDefesa.getPontosDefesa(), jogadorAtaque.getPontosVida(), LocalDateTime.now()));
+            historicoBatalhaRepository.save(historicoBatalha);
+            return new DadosCadastroHistoricoBatalha(batalha.getId(), jogadorAtaque.getJogador(), jogadorAtaque.getPersonagem(), jogadorAtaque.getProximaAcao(), proximaAcao, numSorteado, pontos, 0, jogadorDefesa.getPontosDefesa(), jogadorAtaque.getPontosVida(), LocalDateTime.now());
+        }
+    }
     private int jogarDado(int quantidadeDados,int faceDoDado) {
-            var numero = 0;
+            var novoNumero = 0;
             for (int i = 0; i < quantidadeDados; i++) {
                 Random random = new Random();
-                numero = random.nextInt(faceDoDado);
-                numero += numero;
+                var numero = random.nextInt(faceDoDado)+1;
+                novoNumero += numero;
             }
-            return numero;
+            return novoNumero;
     }
 }
