@@ -7,6 +7,8 @@ create table historicoBatalhas(
     proximaAcao varchar(100),
     numSorteado int,
     dano int,
+    pontosAtaque int,
+    pontosDefesa int,
     pontosVida int,
     data DATETIME,
 

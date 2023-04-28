@@ -28,9 +28,15 @@ public class BatalhaController {
 
     @PutMapping("ataque/{id}")
     @Transactional
-    public void ataque(@PathVariable Long id){
-        //var dto = gerenciador.ataque(id);
-        //eturn ResponseEntity.ok(dto);
-        System.out.println("Chequei aqui");
+    public ResponseEntity ataque(@PathVariable Long id){
+        var dto = gerenciador.ataque(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("defesa/{id}")
+    @Transactional
+    public ResponseEntity defesa(@PathVariable Long id){
+        var dto = gerenciador.defesa(id);
+        return ResponseEntity.ok(dto);
     }
 }

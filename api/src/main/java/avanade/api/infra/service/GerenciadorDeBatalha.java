@@ -2,12 +2,14 @@ package avanade.api.infra.service;
 
 import avanade.api.domain.batalha.Batalha;
 import avanade.api.domain.batalha.BatalhaRepository;
-import avanade.api.domain.batalha.HistoricoBatalha;
-import avanade.api.domain.batalha.HistoricoBatalhaRepository;
 import avanade.api.domain.dto.batalha.DadosCadastroBatalha;
 import avanade.api.domain.dto.batalha.DadosDetalhamentoBatalha;
+import avanade.api.domain.dto.historicoBatalha.DadosAtaqueHistoricoBatalha;
 import avanade.api.domain.dto.historicoBatalha.DadosCadastroHistoricoBatalha;
+import avanade.api.domain.dto.historicoBatalha.DadosDefesaHistoricoBatalha;
 import avanade.api.domain.dto.historicoBatalha.DadosDetalhamentoHistoricoBatalha;
+import avanade.api.domain.historicoBatalhas.HistoricoBatalha;
+import avanade.api.domain.historicoBatalhas.HistoricoBatalhaRepository;
 import avanade.api.domain.personagem.PersonagemRepository;
 import avanade.api.domain.usuario.UsuarioRepository;
 import avanade.api.infra.exception.ValidacaoException;
@@ -27,6 +29,7 @@ public class GerenciadorDeBatalha {
     private PersonagemRepository personagemRepository;
     @Autowired
     private HistoricoBatalhaRepository historicoBatalhaRepository;
+    Random random = new Random();
 
     public DadosDetalhamentoBatalha gerarBatalha(DadosCadastroBatalha dados) {
         var usuario = usuarioRepository.findById(dados.usuario_id()).get();
@@ -42,13 +45,12 @@ public class GerenciadorDeBatalha {
         var personagem = personagemRepository.buscarPersonagem(personagemUsuario.getId());
         var batalha = new Batalha(new DadosCadastroBatalha(dados.usuario_id()),personagem.getId(),personagemUsuario.getId());
         batalhaRepository.save(batalha);
-        var historicobatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), "USUARIO",personagemUsuario.getNome(),"GERAR",proximaAcao,0,0,personagemUsuario.getVida(), LocalDateTime.now()));
+        var historicobatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), "USUARIO",personagemUsuario.getNome(),"GERAR",proximaAcao,0,0,0,0,personagemUsuario.getVida(), LocalDateTime.now()));
         historicoBatalhaRepository.save(historicobatalha);
         return new DadosDetalhamentoBatalha(batalha);
     }
 
     public DadosDetalhamentoHistoricoBatalha iniciarBatalha(Long id) {
-        Random random = new Random();
         var numSorteadoUsuario = 0;
         var numSorteadoComputador = 0;
         var proximaAcaoUsuario = "ATACAR";
@@ -70,8 +72,8 @@ public class GerenciadorDeBatalha {
             proximaAcaoUsuario = "DEFENDER";
             proximaAcaoComputador = "ATACAR";
         }
-        var hBUsuario = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), "USUARIO",usuario.getNome(),"INICIAR", proximaAcaoUsuario,numSorteadoUsuario,0,usuario.getVida(), LocalDateTime.now()));
-        var hBComputador = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), "COMPUTADOR",computador.getNome(),"INICIAR", proximaAcaoComputador,numSorteadoComputador,0,computador.getVida(), LocalDateTime.now()));
+        var hBUsuario = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), "USUARIO",usuario.getNome(),"INICIAR", proximaAcaoUsuario,numSorteadoUsuario,0,0 ,0 ,usuario.getVida(), LocalDateTime.now()));
+        var hBComputador = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), "COMPUTADOR",computador.getNome(),"INICIAR", proximaAcaoComputador,numSorteadoComputador,0,0 ,0 ,computador.getVida(), LocalDateTime.now()));
         historicoBatalhaRepository.save(hBUsuario);
         historicoBatalhaRepository.save(hBComputador);
         return new DadosDetalhamentoHistoricoBatalha(hBUsuario.getBatalha_id(), hBUsuario.getAcao(), hBUsuario.getProximaAcao(),
@@ -79,6 +81,31 @@ public class GerenciadorDeBatalha {
                 hBComputador.getJogador(),hBComputador.getPersonagem(),hBComputador.getNumSorteado());
     }
 
+    public DadosAtaqueHistoricoBatalha ataque(Long id) {
+        var proximaAcao = "DANO";
+        var faceDoDado = 12;
+        var personagem = personagemRepository.findById(batalhaRepository.findById(id).get().getId()).get();
+        var jogador = historicoBatalhaRepository.buscarAtacante(id);
+        var batalha = batalhaRepository.findById(id).get();
+        var numSorteado = random.nextInt(faceDoDado)+1;
+        var pontos = numSorteado + personagem.getForca() + personagem.getAgilidade();
+        var historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogador.getJogador(),jogador.getPersonagem(), jogador.getAcao(), proximaAcao,numSorteado,0,pontos ,0 ,jogador.getPontosVida(), LocalDateTime.now()));
+        historicoBatalhaRepository.save(historicoBatalha);
+        return new DadosAtaqueHistoricoBatalha(jogador.getBatalha_id(), jogador.getJogador(), jogador.getPersonagem(), jogador.getAcao(), proximaAcao, jogador.getNumSorteado(), jogador.getDano(),pontos, jogador.getPontosVida());
+    }
+
+    public DadosDefesaHistoricoBatalha defesa(Long id) {
+        var proximaAcao = "DANO";
+        var faceDoDado = 12;
+        var personagem = personagemRepository.findById(batalhaRepository.findById(id).get().getId()).get();
+        var jogador = historicoBatalhaRepository.buscarDefensor(id);
+        var batalha = batalhaRepository.findById(id).get();
+        var numSorteado = random.nextInt(faceDoDado)+1;
+        var pontos = numSorteado + personagem.getForca() + personagem.getAgilidade();
+        var historicoBatalha = new HistoricoBatalha(new DadosCadastroHistoricoBatalha(batalha.getId(), jogador.getJogador(),jogador.getPersonagem(), jogador.getAcao(), proximaAcao,numSorteado,0,0 ,pontos ,jogador.getPontosVida(), LocalDateTime.now()));
+        historicoBatalhaRepository.save(historicoBatalha);
+        return new DadosDefesaHistoricoBatalha(jogador.getBatalha_id(), jogador.getJogador(), jogador.getPersonagem(), jogador.getAcao(), proximaAcao, jogador.getNumSorteado(), jogador.getDano(),pontos, jogador.getPontosVida());
+    }
 
     private int jogarDado(int quantidadeDados,int faceDoDado) {
             var numero = 0;
@@ -89,6 +116,4 @@ public class GerenciadorDeBatalha {
             }
             return numero;
     }
-
-
 }

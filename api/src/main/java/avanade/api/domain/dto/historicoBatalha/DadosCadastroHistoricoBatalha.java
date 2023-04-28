@@ -16,6 +16,8 @@ public record DadosCadastroHistoricoBatalha(
         String proximaAcao,
         int numSorteado,
         int dano,
+        int pontosAtaque,
+        int pontosDefesa,
         int pontosVida,
         LocalDateTime data
 ) {

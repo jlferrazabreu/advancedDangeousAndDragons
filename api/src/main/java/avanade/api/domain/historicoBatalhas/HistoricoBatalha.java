@@ -1,4 +1,4 @@
-package avanade.api.domain.batalha;
+package avanade.api.domain.historicoBatalhas;
 
 import avanade.api.domain.dto.historicoBatalha.DadosCadastroHistoricoBatalha;
 import jakarta.persistence.*;
@@ -30,6 +30,8 @@ public class HistoricoBatalha {
     private String proximaAcao;
     private int numSorteado;
     private int dano;
+    private int pontosAtaque;
+    private int pontosDefesa;
     private int pontosVida;
     private LocalDateTime data;
 
@@ -41,6 +43,8 @@ public class HistoricoBatalha {
         this.proximaAcao = dados.proximaAcao();
         this.numSorteado = dados.numSorteado();
         this.dano = dados.dano();
+        this.pontosAtaque = dados.pontosAtaque();
+        this.pontosDefesa = dados.pontosDefesa();
         this.pontosVida = dados.pontosVida();
         this.data = dados.data();
     }
