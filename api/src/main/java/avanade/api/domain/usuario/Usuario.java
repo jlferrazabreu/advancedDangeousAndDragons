@@ -1,6 +1,6 @@
 package avanade.api.domain.usuario;
 
-import avanade.api.domain.dto.usuario.DadosEscolherPersonagem;
+import avanade.api.domain.usuario.dto.DadosEscolherPersonagem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

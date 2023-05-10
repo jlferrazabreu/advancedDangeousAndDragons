@@ -1,8 +1,8 @@
 package avanade.api.controller;
 
-import avanade.api.domain.dto.usuario.DadosCadastroUsuario;
-import avanade.api.domain.dto.usuario.DadosDetalhamentoEscolhePersonagem;
-import avanade.api.domain.dto.usuario.DadosEscolherPersonagem;
+import avanade.api.domain.usuario.dto.DadosCadastroUsuario;
+import avanade.api.domain.usuario.dto.DadosDetalhamentoEscolhePersonagem;
+import avanade.api.domain.usuario.dto.DadosEscolherPersonagem;
 import avanade.api.infra.service.GerenciadorDeUsuario;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

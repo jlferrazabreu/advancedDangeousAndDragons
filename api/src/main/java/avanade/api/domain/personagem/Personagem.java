@@ -1,7 +1,7 @@
 package avanade.api.domain.personagem;
 
-import avanade.api.domain.dto.personagem.DadosAtualizacaoPersonagem;
-import avanade.api.domain.dto.personagem.DadosCadastroPersonagem;
+import avanade.api.domain.personagem.dto.DadosAtualizacaoPersonagem;
+import avanade.api.domain.personagem.dto.DadosCadastroPersonagem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

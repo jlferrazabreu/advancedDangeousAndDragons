@@ -1,7 +1,8 @@
 package avanade.api.controller;
 
-import avanade.api.domain.dto.batalha.DadosCadastroBatalha;
+import avanade.api.domain.batalha.dto.DadosCadastroBatalha;
 import avanade.api.infra.service.GerenciadorDeBatalha;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +15,14 @@ public class BatalhaController {
     private GerenciadorDeBatalha gerenciador;
     @PostMapping
     @Transactional
-    public ResponseEntity gerarBatalha(@RequestBody DadosCadastroBatalha dados){
+    public ResponseEntity gerarBatalha(@RequestBody @Valid DadosCadastroBatalha dados){
         var dto = gerenciador.gerarBatalha(dados);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/{id}")
     @Transactional
-    public ResponseEntity iniciarBatalha(@PathVariable Long id){
+    public ResponseEntity iniciarBatalha(@PathVariable @Valid Long id){
         var dto = gerenciador.iniciarBatalha(id);
         return ResponseEntity.ok(dto);
     }
@@ -39,16 +40,17 @@ public class BatalhaController {
         var dto = gerenciador.defesa(id);
         return ResponseEntity.ok(dto);
     }
+
     @PostMapping("calculardano/{id}")
     @Transactional
     public ResponseEntity calculardano(@PathVariable Long id){
         var dto = gerenciador.calculardano(id);
         return ResponseEntity.ok(dto);
     }
-    @PutMapping("calcularpontosvida/{id}")
+    /*@PutMapping("calcularpontosvida/{id}")
     @Transactional
     public ResponseEntity calcularpontosvida(@PathVariable Long id){
         var dto = gerenciador.calcularpontosvida(id);
         return ResponseEntity.ok(dto);
-    }
+    }*/
 }

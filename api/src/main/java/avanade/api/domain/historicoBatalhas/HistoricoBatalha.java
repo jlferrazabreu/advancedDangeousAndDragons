@@ -1,8 +1,7 @@
 package avanade.api.domain.historicoBatalhas;
 
-import avanade.api.domain.dto.historicoBatalha.DadosCadastroHistoricoBatalha;
+import avanade.api.domain.historicoBatalhas.dto.DadosCadastroHistoricoBatalha;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,31 +20,28 @@ public class HistoricoBatalha {
     private Long id;
     @NotNull
     private Long batalha_id;
-    @NotBlank
-    private String jogador;
-    @NotBlank
+    private Long turno_id;
     private String personagem;
-    @NotBlank
-    private String acao;
-    private String proximaAcao;
-    private int numSorteado;
-    private int dano;
-    private int pontosAtaque;
-    private int pontosDefesa;
-    private int pontosVida;
+    private Acao acao;
+    private Long pontosInicio;
+    private Long pontosAtaque;
+    private Long pontosDefesa;
+    private Long qtdDano;
+    private Long pontosVida;
+    private String descricao;
     private LocalDateTime data;
 
     public HistoricoBatalha(DadosCadastroHistoricoBatalha dados) {
         this.batalha_id = dados.batalha_id();
-        this.jogador = dados.jogador();
+        this.turno_id = dados.turno_id();
         this.personagem = dados.personagem();
         this.acao = dados.acao();
-        this.proximaAcao = dados.proximaAcao();
-        this.numSorteado = dados.numSorteado();
-        this.dano = dados.dano();
+        this.pontosInicio = dados.pontosInicio();
         this.pontosAtaque = dados.pontosAtaque();
         this.pontosDefesa = dados.pontosDefesa();
+        this.qtdDano = dados.qtdDano();
         this.pontosVida = dados.pontosVida();
+        this.descricao = dados.descricao();
         this.data = dados.data();
     }
 }

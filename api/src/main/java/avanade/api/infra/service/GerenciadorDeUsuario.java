@@ -1,12 +1,12 @@
 package avanade.api.infra.service;
 
-import avanade.api.domain.dto.usuario.DadosCadastroUsuario;
-import avanade.api.domain.dto.usuario.DadosDetalhamentoEscolhePersonagem;
-import avanade.api.domain.dto.usuario.DadosDetalhamentoUsuario;
-import avanade.api.domain.dto.usuario.DadosEscolherPersonagem;
 import avanade.api.domain.personagem.PersonagemRepository;
 import avanade.api.domain.usuario.Usuario;
 import avanade.api.domain.usuario.UsuarioRepository;
+import avanade.api.domain.usuario.dto.DadosCadastroUsuario;
+import avanade.api.domain.usuario.dto.DadosDetalhamentoEscolhePersonagem;
+import avanade.api.domain.usuario.dto.DadosDetalhamentoUsuario;
+import avanade.api.domain.usuario.dto.DadosEscolherPersonagem;
 import avanade.api.infra.exception.ValidacaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +33,7 @@ public class GerenciadorDeUsuario {
         if(!personagemRepository.existsById(dados.personagem_id())){
             throw  new ValidacaoException("Personagem escolhido não existe!");
         }
-        var personagem = personagemRepository.getReferenceById(dados.personagem_id()).getTipoPersonagem().name();
+        var personagem = personagemRepository.getReferenceById(dados.personagem_id()).getNome();
         usuario.atualizarPersonagemDoUsuario(dados);
         return new DadosDetalhamentoEscolhePersonagem(usuario.getLogin(), personagem);
     }
